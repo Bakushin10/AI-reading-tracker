@@ -39,7 +39,7 @@ generate_ai_commit_message() {
     COMMIT_MSG=$(echo "$STAGED_FILES" | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
   else
     # Use here-document for safer variable substitution
-    COMMIT_MSG=$(claude --prompt "$(cat <<'PROMPT_END'
+    COMMIT_MSG=$(claude --prompt "$(cat <<PROMPT_END
 Create a concise git commit message (max 72 chars) for these changes:
 
 Files changed: $STAGED_FILES
@@ -60,7 +60,7 @@ PROMPT_END
 # Function to generate PR title
 generate_pr_title() {
   if command -v claude >/dev/null 2>&1; then
-    PR_TITLE=$(claude --prompt "$(cat <<'PROMPT_END'
+    PR_TITLE=$(claude --prompt "$(cat <<PROMPT_END
 Based on these file changes, create a concise PR title (max 60 chars):
 Files changed: $STAGED_FILES
 Diff summary: $DIFF_CONTENT
