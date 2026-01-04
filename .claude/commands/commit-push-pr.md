@@ -35,7 +35,14 @@ else
   DIFF_CONTENT=$(git diff --cached --stat)
   DIFF_SAMPLE=$(git diff --cached | head -20)
 
-  COMMIT_MSG=$(claude --prompt "Create a concise git commit message (max 72 chars) for these changes:
+  # Check if claude command is available
+  if ! command -v claude >/dev/null 2>&1; then
+    echo "Warning: claude command not found. Using fallback commit message generation."
+    COMMIT_MSG=$(echo "$STAGED_FILES" | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
+  else
+    # Use here-document for safer variable substitution
+    COMMIT_MSG=$(claude --prompt "$(cat <<'PROMPT_END'
+Create a concise git commit message (max 72 chars) for these changes:
 
 Files changed: $STAGED_FILES
 Diff summary: $DIFF_CONTENT
@@ -43,11 +50,15 @@ Diff summary: $DIFF_CONTENT
 Sample diff:
 $DIFF_SAMPLE
 
-Follow conventional commit format (feat:, fix:, docs:, refactor:, etc.) and be specific about what changed. Generate only the commit message, nothing else.")
+Follow conventional commit format (feat:, fix:, docs:, refactor:, etc.) and be specific about what changed. Generate only the commit message, nothing else.
+PROMPT_END
+)")
 
-  # Fallback to basic message if AI generation fails
-  if [ -z "$COMMIT_MSG" ]; then
-    COMMIT_MSG=$(echo "$STAGED_FILES" | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
+    # Fallback to basic message if AI generation fails
+    if [ -z "$COMMIT_MSG" ]; then
+      echo "Warning: AI message generation failed or returned empty. Using fallback."
+      COMMIT_MSG=$(echo "$STAGED_FILES" | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
+    fi
   fi
 fi
 
@@ -73,12 +84,19 @@ fi
 # Generate AI-powered PR title and body
 
 # Create AI-generated PR title using Claude
-PR_TITLE=$(claude --prompt "Based on these file changes, create a concise PR title (max 60 chars):
+if command -v claude >/dev/null 2>&1; then
+  PR_TITLE=$(claude --prompt "$(cat <<'PROMPT_END'
+Based on these file changes, create a concise PR title (max 60 chars):
 Files changed: $STAGED_FILES
 Diff summary: $DIFF_CONTENT
 Commit message: $COMMIT_MSG
 
-Generate only the title, nothing else.")
+Generate only the title, nothing else.
+PROMPT_END
+)")
+else
+  PR_TITLE=""
+fi
 
 # Use commit message as fallback if AI generation fails or exceeds length limit
 if [ -z "$PR_TITLE" ] || [ ${#PR_TITLE} -gt 60 ]; then
