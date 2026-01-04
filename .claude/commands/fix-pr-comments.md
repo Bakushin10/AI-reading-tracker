@@ -25,10 +25,19 @@ fi
 
 echo "Found PR #$PR_NUMBER for branch '$CURRENT_BRANCH'"
 
-# Fetch PR comments
-echo "Fetching comments from PR #$PR_NUMBER..."
+# Fetch PR comments (general comments)
+echo "Fetching general comments from PR #$PR_NUMBER..."
 gh pr view "$PR_NUMBER" --json comments --jq '.comments[] | "Comment by \(.author.login):\n\(.body)\n---"'
 
 echo ""
+echo "Fetching file review comments from PR #$PR_NUMBER..."
+# Get repository info for API calls
+REPO_OWNER=$(gh repo view --json owner --jq '.owner.login')
+REPO_NAME=$(gh repo view --json name --jq '.name')
+
+# Fetch file review comments via GitHub API (these contain CodeRabbit's actionable feedback)
+gh api "repos/$REPO_OWNER/$REPO_NAME/pulls/$PR_NUMBER/comments" --jq '.[] | "File Review Comment by \(.user.login) on \(.path):\n\(.body)\n---"'
+
+echo ""
 echo "Analyzing comments and applying fixes..."
-echo "Note: Claude will now review the comments and apply appropriate fixes to the codebase."
+echo "Note: Claude will now review both general comments and file review comments to apply appropriate fixes to the codebase."
