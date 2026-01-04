@@ -49,5 +49,21 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Make PR body dynamic instead of hardcoded "Auto-generated PR"
-gh pr create --title "$COMMIT_MSG" --body "Automated commit: $COMMIT_MSG"
+# Generate AI-powered PR title and body
+STAGED_FILES=$(git diff --cached --name-only)
+DIFF_CONTENT=$(git diff --cached --stat)
+
+# Create AI-generated PR title using Claude
+PR_TITLE=$(claude --prompt "Based on these file changes, create a concise PR title (max 60 chars):
+Files changed: $STAGED_FILES
+Diff summary: $DIFF_CONTENT
+Commit message: $COMMIT_MSG
+
+Generate only the title, nothing else.")
+
+# Use commit message as fallback if AI generation fails
+if [ -z "$PR_TITLE" ] || [ ${#PR_TITLE} -gt 72 ]; then
+  PR_TITLE="$COMMIT_MSG"
+fi
+
+gh pr create --title "$PR_TITLE" --body "Automated commit: $COMMIT_MSG"
