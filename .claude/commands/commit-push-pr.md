@@ -79,39 +79,45 @@ PROMPT_END
   fi
 }
 
-# Check if current branch is main and abort if so
-CURRENT_BRANCH=$(git branch --show-current)
-if [ "$CURRENT_BRANCH" = "main" ]; then
-  echo "Error: Cannot create PR from main branch. Please create a feature branch first."
-  exit 1
-fi
+# Main execution function
+main() {
+  # Check if current branch is main and abort if so
+  CURRENT_BRANCH=$(git branch --show-current)
+  if [ "$CURRENT_BRANCH" = "main" ]; then
+    echo "Error: Cannot create PR from main branch. Please create a feature branch first."
+    exit 1
+  fi
 
-# Generate commit message based on whether arguments are provided
-if [ -n "$ARGUMENTS" ]; then
-  use_provided_commit_message
-else
-  generate_ai_commit_message
-fi
+  # Generate commit message based on whether arguments are provided
+  if [ -n "$ARGUMENTS" ]; then
+    use_provided_commit_message
+  else
+    generate_ai_commit_message
+  fi
 
-# Create commit with error handling
-git commit -m "$COMMIT_MSG"
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to create commit."
-  exit 1
-fi
+  # Create commit with error handling
+  git commit -m "$COMMIT_MSG"
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to create commit."
+    exit 1
+  fi
 
-# Push to remote with error handling
-git push -u origin $(git branch --show-current)
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to push to remote."
-  exit 1
-fi
+  # Push to remote with error handling
+  git push -u origin $(git branch --show-current)
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to push to remote."
+    exit 1
+  fi
 
-# Generate PR title and create pull request
-generate_pr_title
+  # Generate PR title and create pull request
+  generate_pr_title
 
-gh pr create --title "$PR_TITLE" --body "Automated commit: $COMMIT_MSG"
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to create pull request."
-  exit 1
-fi
+  gh pr create --title "$PR_TITLE" --body "Automated commit: $COMMIT_MSG"
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to create pull request."
+    exit 1
+  fi
+}
+
+# Script execution starts here
+main "$@"
