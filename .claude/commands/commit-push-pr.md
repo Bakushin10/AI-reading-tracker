@@ -20,25 +20,42 @@ if [ "$CURRENT_BRANCH" = "main" ]; then
   exit 1
 fi
 
-# Generate commit message based on git diff
-COMMIT_MSG=$(git diff --cached --name-only | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
-
-# If no staged changes, stage all changes and generate message
-# Warning message and check for messages without dashes to detect empty content
-if [ -z "$COMMIT_MSG" ] || [ "$COMMIT_MSG" = "Update: " ] || ! echo "$COMMIT_MSG" | grep -q -- "-"; then
-  echo "Warning: No staged changes detected. Staging all changes..."
-  git add .
-  COMMIT_MSG=$(git diff --cached --name-only | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
-fi
-
-# Use provided message if given, otherwise use generated one
+# Use provided message if given, otherwise generate AI-powered commit message
 if [ -n "$ARGUMENTS" ]; then
   COMMIT_MSG="$ARGUMENTS"
+else
+  # If no staged changes, stage all changes first
+  if [ -z "$(git diff --cached --name-only)" ]; then
+    echo "Warning: No staged changes detected. Staging all changes..."
+    git add .
+  fi
+
+  # Generate AI-powered commit message
+  STAGED_FILES=$(git diff --cached --name-only)
+  DIFF_CONTENT=$(git diff --cached --stat)
+  DIFF_SAMPLE=$(git diff --cached | head -20)
+
+  COMMIT_MSG=$(claude --prompt "Create a concise git commit message (max 72 chars) for these changes:
+
+Files changed: $STAGED_FILES
+Diff summary: $DIFF_CONTENT
+
+Sample diff:
+$DIFF_SAMPLE
+
+Follow conventional commit format (feat:, fix:, docs:, refactor:, etc.) and be specific about what changed. Generate only the commit message, nothing else.")
+
+  # Fallback to basic message if AI generation fails
+  if [ -z "$COMMIT_MSG" ]; then
+    COMMIT_MSG=$(echo "$STAGED_FILES" | head -5 | sed 's/^/- /' | tr '\n' ' ' | sed 's/^/Update: /')
+  fi
 fi
 
-# Capture changed files and diff before committing (for PR title generation)
-STAGED_FILES=$(git diff --cached --name-only)
-DIFF_CONTENT=$(git diff --cached --stat)
+# Ensure variables are set for PR title generation if not using AI commit message
+if [ -n "$ARGUMENTS" ]; then
+  STAGED_FILES=$(git diff --cached --name-only)
+  DIFF_CONTENT=$(git diff --cached --stat)
+fi
 
 # Error handling to prevent cascading failures
 git commit -m "$COMMIT_MSG"
