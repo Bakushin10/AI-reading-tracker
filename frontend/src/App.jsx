@@ -1,11 +1,20 @@
 import { useState } from 'react'
 import './App.css'
 
+/**
+ * Main application component for the AI Reading Tracker.
+ * Manages book collection and reading progress tracking.
+ * @returns {JSX.Element} The main application interface
+ */
 function App() {
   const [books, setBooks] = useState([])
   const [currentBook, setCurrentBook] = useState('')
   const [readingProgress, setReadingProgress] = useState(0)
 
+  /**
+   * Adds a new book to the reading list.
+   * Creates a book object with unique ID, title, and initial progress.
+   */
   const addBook = () => {
     if (currentBook.trim()) {
       setBooks([...books, {
@@ -18,12 +27,21 @@ function App() {
     }
   }
 
+  /**
+   * Updates the reading progress for a specific book.
+   * @param {number} bookId - The unique identifier of the book
+   * @param {number} progress - The new progress percentage (0-100)
+   */
   const updateProgress = (bookId, progress) => {
     setBooks(books.map(book =>
       book.id === bookId ? { ...book, progress } : book
     ))
   }
 
+  /**
+   * Removes a book from the reading list.
+   * @param {number} bookId - The unique identifier of the book to remove
+   */
   const removeBook = (bookId) => {
     setBooks(books.filter(book => book.id !== bookId))
   }
