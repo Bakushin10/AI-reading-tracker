@@ -1,0 +1,24 @@
+{
+  "name": "ai-reading-tracker-services",
+  "version": "1.0.0",
+  "description": "TypeScript services for AI reading tracker",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/main.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^20.17.11",
+    "typescript": "^5.7.3",
+    "tsx": "^4.19.2"
+  }
+}
