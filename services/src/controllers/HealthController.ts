@@ -13,7 +13,8 @@ export class HealthController {
       const healthCheck = await this.healthCheckService.checkHealth();
       res.status(200).json(healthCheck);
     } catch (error) {
-      res.status(500).json({ message: 'Health check failed', error });
+      console.error('Health check failed:', error);
+      res.status(500).json({ message: 'Health check failed' });
     }
   };
 }
