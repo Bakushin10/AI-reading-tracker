@@ -1,13 +1,13 @@
 import './styles/App.css'
 import './styles/global.css'
-import Header from './layouts/Header'
+import MainLayout from './layouts/MainLayout'
 
 function App() {
   return (
     <div className="app">
-      <Header />
-      <main className="main">
-      </main>
+      <MainLayout>
+        {/* Page content will go here */}
+      </MainLayout>
     </div>
   )
 }
