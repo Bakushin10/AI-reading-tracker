@@ -1,12 +1,13 @@
 import './styles/App.css'
 import './styles/global.css'
 import MainLayout from './layouts/MainLayout'
+import BookHistorySection from './components/Book/BookHistorySection'
 
 function App() {
   return (
     <div className="app">
       <MainLayout>
-        {/* Page content will go here */}
+        <BookHistorySection />
       </MainLayout>
     </div>
   )
