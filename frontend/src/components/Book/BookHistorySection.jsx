@@ -81,21 +81,72 @@ const BookHistorySection = () => {
   if (error) return <div className="error">Error: {error.message}</div>;
 
   return (
-    <div className="panels-container">
-      <div className="left-panel">
-        <BookList
-          entries={entries}
-          onBookSelect={handleBookSelect}
-          selectedBook={selectedBook}
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-        />
-      </div>
+    <>
+      <style>{`
+        .panels-container {
+          display: flex;
+          gap: 20px;
+          margin: 0 auto;
+          max-width: 1070px;
+          height: calc(100vh - 200px);
+        }
 
-      <div className="right-panel">
-        <BookDetail book={selectedBook} />
+        .left-panel {
+          width: 300px;
+          min-width: 300px;
+          background-color: white;
+          border: 2px solid black;
+          border-radius: 8px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .right-panel {
+          width: 750px;
+          min-width: 750px;
+          max-width: 750px;
+          background-color: #fafafa;
+          border: 2px solid black;
+          border-radius: 8px;
+          overflow-y: auto;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .loading {
+          text-align: center;
+          padding: 80px 20px;
+          font-size: 18px;
+          color: #666;
+        }
+
+        .error {
+          text-align: center;
+          padding: 80px 20px;
+          font-size: 16px;
+          color: #d32f2f;
+          background-color: #ffeaa7;
+          border: 2px solid #d32f2f;
+          border-radius: 6px;
+          margin-bottom: 20px;
+        }
+      `}</style>
+      <div className="panels-container">
+        <div className="left-panel">
+          <BookList
+            entries={entries}
+            onBookSelect={handleBookSelect}
+            selectedBook={selectedBook}
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+          />
+        </div>
+
+        <div className="right-panel">
+          <BookDetail book={selectedBook} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

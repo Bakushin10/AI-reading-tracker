@@ -18,3 +18,20 @@
 ├── /router.jsx        # Routing (React Router setup)
 └── /config/           # Environment variables and configuration files
 ```
+
+# CSS Organization
+
+## Component-Level Styles
+- Each React component includes its own CSS styles using `<style>` tags within the component file
+- Use `className` attributes with CSS class selectors as normal
+- Component styles are defined in template literals within `<style>{` ... `}</style>` tags
+- This approach keeps styles co-located with their components for easier debugging and maintenance
+
+## Global Styles
+- `/src/styles/App.css` contains only global styles:
+  - CSS reset/normalize styles
+  - App-level layout (`.app`, `.main`)
+  - Header styles
+  - Modal and form styles
+  - Shared button styles
+- `/src/styles/global.css` contains basic HTML element styles and root variables
