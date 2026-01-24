@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import useEntryModal from '../hooks/useEntryModal';
 
 const NewEntryModal = ({ isOpen, onClose }) => {
+  const { createEntryMutation, isLoading, error } = useEntryModal();
   const [formData, setFormData] = useState({
     title: '',
     link: '',
@@ -15,15 +17,22 @@ const NewEntryModal = ({ isOpen, onClose }) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form data:', formData);
-    onClose();
+  const resetForm = () => {
     setFormData({
       title: '',
       link: '',
       date: new Date().toISOString().split('T')[0],
       comment: ''
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createEntryMutation.mutate(formData, {
+      onSuccess: () => {
+        onClose();
+        resetForm();
+      }
     });
   };
 
@@ -51,7 +60,7 @@ const NewEntryModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="form-field">
-            <label htmlFor="link">Link</label>
+            <label htmlFor="link">Link (optional)</label>
             <input
               type="url"
               id="link"
@@ -86,12 +95,18 @@ const NewEntryModal = ({ isOpen, onClose }) => {
             />
           </div>
 
+          {error && (
+            <div className="error-message">
+              Error: {error.message}
+            </div>
+          )}
+
           <div className="form-actions">
-            <button type="button" onClick={onClose} className="button-secondary">
+            <button type="button" onClick={onClose} className="button-secondary" disabled={isLoading}>
               Cancel
             </button>
-            <button type="submit" className="button-primary">
-              Save Entry
+            <button type="submit" className="button-primary" disabled={isLoading}>
+              {isLoading ? 'Saving...' : 'Save Entry'}
             </button>
           </div>
         </form>

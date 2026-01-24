@@ -1,13 +1,14 @@
 import './styles/App.css'
 import './styles/global.css'
-import Header from './layouts/Header'
+import MainLayout from './layouts/MainLayout'
+import BookHistorySection from './components/Book/BookHistorySection'
 
 function App() {
   return (
     <div className="app">
-      <Header />
-      <main className="main">
-      </main>
+      <MainLayout>
+        <BookHistorySection />
+      </MainLayout>
     </div>
   )
 }

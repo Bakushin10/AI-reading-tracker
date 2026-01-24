@@ -1,4 +1,4 @@
-import { HealthCheckResponse, HealthCheckRepository } from '../domain/entities/index.js';
+import { HealthCheckResponse, HealthCheckRepository } from '../domain/index.js';
 
 export class HealthCheckService implements HealthCheckRepository {
   async checkHealth(): Promise<HealthCheckResponse> {
