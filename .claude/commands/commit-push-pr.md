@@ -27,6 +27,11 @@ generate_ai_commit_message() {
   if [ -z "$(git diff --cached --name-only)" ]; then
     echo "Warning: No staged changes detected. Staging all changes..."
     git add .
+    if [ $? -ne 0 ]; then
+      echo "Error: Failed to stage changes with 'git add .'"
+      exit 1
+    fi
+    echo "Successfully staged changes."
   fi
 
   # Generate AI-powered commit message
@@ -86,6 +91,12 @@ main() {
   if [ "$CURRENT_BRANCH" = "main" ]; then
     echo "Error: Cannot create PR from main branch. Please create a feature branch first."
     exit 1
+  fi
+
+  # Check if there are any changes to commit (staged or unstaged)
+  if [ -z "$(git diff --cached --name-only)" ] && [ -z "$(git diff --name-only)" ] && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+    echo "No changes detected. Nothing to commit."
+    exit 0
   fi
 
   # Generate commit message based on whether arguments are provided
