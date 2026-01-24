@@ -4,6 +4,7 @@ import cors from 'cors';
 import { Pool } from 'pg';
 import { HealthController, BookController } from './controllers/index.js';
 import { HealthCheckService, BookService } from './services/index.js';
+import { BookQueryService } from './queryServices/index.js';
 import { PostgresBookRepository } from './infrastructure/index.js';
 
 const app = express();
@@ -24,14 +25,15 @@ app.use(express.json());
 const healthController = new HealthController();
 const bookRepository = new PostgresBookRepository();
 const bookService = new BookService(db, bookRepository);
-const bookController = new BookController(bookService);
+const bookQueryService = new BookQueryService(db);
+const bookController = new BookController(bookService, bookQueryService);
 
 // Routes
 app.get('/ping', healthController.ping);
 
 // Book routes
 app.post('/api/books', bookController.createBook);
-app.get('/api/books', bookController.getAllBooks);
+app.get('/api/books', bookController.getBooksByPage);
 app.get('/api/books/:id', bookController.getBookById);
 app.put('/api/books/:id', bookController.updateBook);
 app.delete('/api/books/:id', bookController.deleteBook);
