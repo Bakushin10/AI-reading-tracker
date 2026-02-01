@@ -46,28 +46,25 @@ export class PostgresBookRepository implements BookRepository {
     return result.rows[0] ? this.mapRowToBook(result.rows[0]) : null;
   }
 
-  async updateBook(client: PoolClient, bookUuid: string, updates: Partial<Pick<Book, 'title' | 'link' | 'date' | 'memo'>>): Promise<Book | null> {
-    const updateFields = [];
-    const values: (string | Date)[] = [bookUuid];
-    let paramIndex = 2;
-
-    for (const [key, value] of Object.entries(updates)) {
-      updateFields.push(`${key} = $${paramIndex}`);
-      values.push(value);
-      paramIndex++;
-    }
-
-    updateFields.push(`updated_at = $${paramIndex}`);
-    values.push(new Date());
+  async updateBook(client: PoolClient, book: Book): Promise<Book | null> {
+    const now = new Date();
 
     const query = `
       UPDATE books
-      SET ${updateFields.join(', ')}
+      SET title = $2, link = $3, date = $4, memo = $5, updated_at = $6
       WHERE book_uuid = $1
       RETURNING book_uuid, title, link, date, memo, created_at, updated_at
     `;
 
-    const result = await client.query<BookRow>(query, values);
+    const result = await client.query<BookRow>(query, [
+      book.bookUuid,
+      book.title,
+      book.link || null,
+      book.date,
+      book.memo,
+      now
+    ]);
+
     return result.rows[0] ? this.mapRowToBook(result.rows[0]) : null;
   }
 

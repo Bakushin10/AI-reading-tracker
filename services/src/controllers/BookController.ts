@@ -84,7 +84,19 @@ export class BookController {
 
   updateBook = async (req: Request<{ id: string }, BookResponse, UpdateBookRequest>, res: Response): Promise<void> => {
     try {
-      const book = await this.bookService.updateBook(req.params.id, req.body);
+      const existingBook = await this.bookService.getBookById(req.params.id);
+
+      if (!existingBook) {
+        res.status(404).json({ message: 'Book not found' });
+        return;
+      }
+
+      const updatedBook = {
+        ...existingBook,
+        ...req.body
+      };
+
+      const book = await this.bookService.updateBook(updatedBook);
 
       if (!book) {
         res.status(404).json({ message: 'Book not found' });

@@ -34,11 +34,11 @@ export class BookService {
     }
   }
 
-  async updateBook(bookUuid: string, updates: Partial<Pick<Book, 'title' | 'link' | 'date' | 'memo'>>): Promise<Book | null> {
+  async updateBook(book: Book): Promise<Book | null> {
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
-      const result = await this.bookRepository.updateBook(client, bookUuid, updates);
+      const result = await this.bookRepository.updateBook(client, book);
       await client.query('COMMIT');
       return result;
     } catch (error) {
