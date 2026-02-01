@@ -1,225 +1,156 @@
-const BookDetail = ({ book }) => {
+import React from 'react';
+import { Box, TextField, Button, Typography, Link } from '@mui/material';
+import { Formik, Form } from 'formik';
+
+const BookDetail = ({ book, onBookUpdate }) => {
+  const initialValues = {
+    title: book?.title || '',
+    memo: book?.memo || ''
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/books/${book.bookUuid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update book');
+      }
+
+      const result = await response.json();
+      onBookUpdate(result);
+    } catch (err) {
+      console.error('Error updating book:', err);
+    }
+  };
+
   if (!book) {
     return (
-      <>
-        <style>{`
-          .book-detail {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-          }
-
-          .book-detail-placeholder {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-
-          .placeholder-content {
-            text-align: center;
-            color: #666;
-          }
-
-          .placeholder-content h3 {
-            font-size: 32px;
-            margin-bottom: 16px;
-            font-weight: 700;
-            color: #333;
-          }
-
-          .placeholder-content p {
-            font-size: 20px;
-            line-height: 1.5;
-            color: #666;
-          }
-        `}</style>
-        <div className="book-detail">
-          <div className="book-detail-placeholder">
-            <div className="placeholder-content">
-              <h3>Select a book</h3>
-              <p>Choose a book from the list to view details</p>
-            </div>
-          </div>
-        </div>
-      </>
+      <Box
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Box textAlign="center">
+          <Typography variant="h4" fontWeight={700} color="#333" mb={2}>
+            Select a book
+          </Typography>
+          <Typography variant="h6" color="#666">
+            Choose a book from the list to view details
+          </Typography>
+        </Box>
+      </Box>
     );
   }
 
   return (
-    <>
-      <style>{`
-        .book-detail {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box px={4} pb={4} pt={1} flex={1} overflow="auto">
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          enableReinitialize={true}
+        >
+          {({ values, handleChange, dirty, handleSubmit }) => (
+            <Form>
+              {/* Title Input */}
+              <Box mb={2}>
+                <TextField
+                  name="title"
+                  value={values.title}
+                  onChange={handleChange}
+                  placeholder="Book title..."
+                  variant="outlined"
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      '& input': {
+                        padding: '12px',
+                      }
+                    }
+                  }}
+                />
+              </Box>
 
-        .book-detail-content {
-          padding: 30px;
-          flex: 1;
-          overflow-y: auto;
-        }
+              {/* Date and Link Row */}
+              <Box display="flex" gap={1} alignItems="center" mb={1}>
+                {book.link && (
+                  <Link
+                    href={book.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={book.link}
+                    sx={{
+                      fontSize: '18px',
+                      textDecoration: 'none',
+                      '&:hover': { transform: 'scale(1.1)' }
+                    }}
+                  >
+                    🔗
+                  </Link>
+                )}
+                <Typography variant="body2" color="#333" fontWeight={500}>
+                  {new Date(book.date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </Typography>
+              </Box>
 
-        .book-detail-header {
-          margin-bottom: 30px;
-          padding-bottom: 20px;
-          border-bottom: 1px solid #ddd;
-        }
+              {/* Notes Section */}
+              <Box mb={1}>
+                <TextField
+                  name="memo"
+                  value={values.memo}
+                  onChange={handleChange}
+                  placeholder="Your thoughts on this reading..."
+                  multiline
+                  rows={6}
+                  variant="outlined"
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fafafa',
+                      '& textarea': {
+                        minHeight: '75px',
+                      }
+                    }
+                  }}
+                />
+              </Box>
 
-        .book-detail-title {
-          font-size: 28px;
-          font-weight: 700;
-          color: black;
-          margin: 0 0 12px 0;
-          line-height: 1.3;
-        }
-
-        .book-detail-meta {
-          color: #666;
-          font-size: 14px;
-        }
-
-        .book-detail-date {
-          font-weight: 500;
-        }
-
-        .book-detail-link {
-          margin-bottom: 30px;
-        }
-
-        .book-detail-link h4 {
-          font-size: 16px;
-          font-weight: 600;
-          color: black;
-          margin: 0 0 12px 0;
-        }
-
-        .external-link {
-          color: #2557a7;
-          text-decoration: none;
-          font-size: 14px;
-          word-break: break-all;
-          border-bottom: 1px solid #2557a7;
-        }
-
-        .external-link:hover {
-          opacity: 0.8;
-        }
-
-        .book-detail-memo {
-          margin-bottom: 30px;
-        }
-
-        .book-detail-memo h4 {
-          font-size: 16px;
-          font-weight: 600;
-          color: black;
-          margin: 0 0 16px 0;
-        }
-
-        .memo-content p {
-          font-size: 15px;
-          line-height: 1.6;
-          color: #333;
-          margin-bottom: 12px;
-        }
-
-        .memo-content p:last-child {
-          margin-bottom: 0;
-        }
-
-        .book-detail-actions {
-          display: flex;
-          gap: 12px;
-          padding-top: 20px;
-          border-top: 1px solid #ddd;
-        }
-
-        .action-btn {
-          padding: 10px 16px;
-          font-size: 14px;
-          font-weight: 500;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-          font-family: inherit;
-          transition: all 0.2s ease;
-        }
-
-        .edit-btn {
-          background-color: #2557a7;
-          color: white;
-          border-color: #2557a7;
-        }
-
-        .edit-btn:hover {
-          background-color: #1e4a8c;
-        }
-
-        .delete-btn {
-          background-color: white;
-          color: #d32f2f;
-          border-color: #d32f2f;
-        }
-
-        .delete-btn:hover {
-          background-color: #d32f2f;
-          color: white;
-        }
-      `}</style>
-      <div className="book-detail">
-        <div className="book-detail-content">
-          <div className="book-detail-header">
-            <h2 className="book-detail-title">{book.title}</h2>
-            <div className="book-detail-meta">
-              <span className="book-detail-date">
-                Added on {new Date(book.date).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </span>
-            </div>
-          </div>
-
-          {book.link && (
-            <div className="book-detail-link">
-              <h4>Source</h4>
-              <a
-                href={book.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="external-link"
-              >
-                {book.link}
-              </a>
-            </div>
+              {/* Action Buttons */}
+              <Box display="flex" gap={1.5}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleSubmit}
+                  disabled={!dirty}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                >
+                  Delete
+                </Button>
+              </Box>
+            </Form>
           )}
-
-          {book.memo && (
-            <div className="book-detail-memo">
-              <h4>Notes</h4>
-              <div className="memo-content">
-                {book.memo.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="book-detail-actions">
-            <button className="action-btn edit-btn">
-              Edit
-            </button>
-            <button className="action-btn delete-btn">
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+        </Formik>
+      </Box>
+    </Box>
   );
 };
 

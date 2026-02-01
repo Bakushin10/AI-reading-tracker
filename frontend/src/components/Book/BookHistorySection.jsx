@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Box, Typography, Alert, CircularProgress } from '@mui/material';
 import BookList from './BookList';
 import BookDetail from './BookDetail';
 import { useBooks } from '../../hooks/useBooks.js';
@@ -18,76 +19,80 @@ const BookHistorySection = () => {
     setSearchTerm(newSearchTerm);
   };
 
-  if (isLoading) return <div className="loading">Loading entries...</div>;
-  if (error) return <div className="error">Error: {error.message}</div>;
+  const handleBookUpdate = (updatedBook) => {
+    setSelectedBook(updatedBook);
+    refetch();
+  };
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="400px">
+        <Box textAlign="center">
+          <CircularProgress size={40} />
+          <Typography variant="h6" color="#666" mt={2}>
+            Loading entries...
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box p={4}>
+        <Alert severity="error">
+          Error: {error.message}
+        </Alert>
+      </Box>
+    );
+  }
 
   return (
-    <>
-      <style>{`
-        .panels-container {
-          display: flex;
-          gap: 20px;
-          margin: 0 auto;
-          max-width: 1070px;
-          height: calc(100vh - 200px);
-        }
+    <Box
+      display="flex"
+      gap={2.5}
+      maxWidth={1070}
+      height="calc(100vh - 200px)"
+      overflow="hidden"
+      justifyContent="center"
+      mx="auto"
+    >
+      {/* Left Panel - Book List */}
+      <Box
+        width={300}
+        minWidth={300}
+        bgcolor="white"
+        border="2px solid black"
+        borderRadius={1}
+        display="flex"
+        flexDirection="column"
+      >
+        <BookList
+          entries={books}
+          onBookSelect={handleBookSelect}
+          selectedBook={selectedBook}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+        />
+      </Box>
 
-        .left-panel {
-          width: 300px;
-          min-width: 300px;
-          background-color: white;
-          border: 2px solid black;
-          border-radius: 8px;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .right-panel {
-          width: 750px;
-          min-width: 750px;
-          max-width: 750px;
-          background-color: #fafafa;
-          border: 2px solid black;
-          border-radius: 8px;
-          overflow-y: auto;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-        }
-
-        .loading {
-          text-align: center;
-          padding: 80px 20px;
-          font-size: 18px;
-          color: #666;
-        }
-
-        .error {
-          text-align: center;
-          padding: 80px 20px;
-          font-size: 16px;
-          color: #d32f2f;
-          background-color: #ffeaa7;
-          border: 2px solid #d32f2f;
-          border-radius: 6px;
-          margin-bottom: 20px;
-        }
-      `}</style>
-      <div className="panels-container">
-        <div className="left-panel">
-          <BookList
-            entries={books}
-            onBookSelect={handleBookSelect}
-            selectedBook={selectedBook}
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-          />
-        </div>
-
-        <div className="right-panel">
-          <BookDetail book={selectedBook} />
-        </div>
-      </div>
-    </>
+      {/* Right Panel - Book Detail */}
+      <Box
+        width={750}
+        minWidth={750}
+        maxWidth={750}
+        bgcolor="#fafafa"
+        border="2px solid black"
+        borderRadius={1}
+        overflow="auto"
+        sx={{
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word'
+        }}
+      >
+        <BookDetail book={selectedBook} onBookUpdate={handleBookUpdate} />
+      </Box>
+    </Box>
   );
 };
 
