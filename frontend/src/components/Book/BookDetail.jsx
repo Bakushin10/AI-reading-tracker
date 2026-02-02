@@ -36,12 +36,13 @@ const BookDetail = ({ book, onBookUpdate }) => {
         display="flex"
         alignItems="center"
         justifyContent="center"
+        bgcolor="#000000"
       >
         <Box textAlign="center">
-          <Typography variant="h4" fontWeight={700} color="#333" mb={2}>
+          <Typography variant="h4" fontWeight={600} color="#ffffff" mb={2}>
             Select a book
           </Typography>
-          <Typography variant="h6" color="#666">
+          <Typography variant="h6" color="#00bcd4">
             Choose a book from the list to view details
           </Typography>
         </Box>
@@ -50,7 +51,7 @@ const BookDetail = ({ book, onBookUpdate }) => {
   }
 
   return (
-    <Box height="100%" display="flex" flexDirection="column">
+    <Box height="100%" display="flex" flexDirection="column" bgcolor="#000000">
       <Box px={4} pb={4} pt={1} flex={1} overflow="auto">
         <Formik
           initialValues={initialValues}
@@ -72,8 +73,23 @@ const BookDetail = ({ book, onBookUpdate }) => {
                     '& .MuiOutlinedInput-root': {
                       fontSize: '12px',
                       fontWeight: 700,
+                      backgroundColor: '#111111',
+                      color: '#ffffff',
+                      border: '2px solid #333333',
+                      borderRadius: '6px',
                       '& input': {
                         padding: '12px',
+                        color: '#ffffff',
+                      },
+                      '&:hover': {
+                        border: '2px solid #555555',
+                      },
+                      '&.Mui-focused': {
+                        border: '2px solid #00bcd4',
+                        boxShadow: '0 0 0 2px rgba(0, 188, 212, 0.2)',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
                       }
                     }
                   }}
@@ -91,13 +107,14 @@ const BookDetail = ({ book, onBookUpdate }) => {
                     sx={{
                       fontSize: '18px',
                       textDecoration: 'none',
+                      filter: 'hue-rotate(180deg)',
                       '&:hover': { transform: 'scale(1.1)' }
                     }}
                   >
                     🔗
                   </Link>
                 )}
-                <Typography variant="body2" color="#333" fontWeight={500}>
+                <Typography variant="body2" color="#00bcd4" fontWeight={500}>
                   {new Date(book.date).toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -120,9 +137,23 @@ const BookDetail = ({ book, onBookUpdate }) => {
                   fullWidth
                   sx={{
                     '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fafafa',
+                      backgroundColor: '#111111',
+                      color: '#ffffff',
+                      border: '2px solid #333333',
+                      borderRadius: '6px',
                       '& textarea': {
                         minHeight: '75px',
+                        color: '#ffffff',
+                      },
+                      '&:hover': {
+                        border: '2px solid #555555',
+                      },
+                      '&.Mui-focused': {
+                        border: '2px solid #00bcd4',
+                        boxShadow: '0 0 0 2px rgba(0, 188, 212, 0.2)',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
                       }
                     }
                   }}
@@ -133,15 +164,42 @@ const BookDetail = ({ book, onBookUpdate }) => {
               <Box display="flex" gap={1.5}>
                 <Button
                   variant="contained"
-                  color="success"
                   onClick={handleSubmit}
                   disabled={!dirty}
+                  color="success"
+                  sx={{
+                    backgroundColor: '#00bcd4',
+                    color: '#000000',
+                    border: '2px solid #00bcd4',
+                    borderRadius: '6px',
+                    padding: '10px 20px',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#00bcd4',
+                    },
+                    '&:disabled': {
+                      backgroundColor: '#333333',
+                      color: '#888888',
+                      border: '2px solid #333333',
+                    }
+                  }}
                 >
                   Save
                 </Button>
                 <Button
                   variant="outlined"
                   color="error"
+                  sx={{
+                    color: '#ffffff',
+                    borderColor: '#666666',
+                    border: '2px solid #666666',
+                    borderRadius: '6px',
+                    padding: '10px 20px',
+                    '&:hover': {
+                      backgroundColor: '#333333',
+                      borderColor: '#ffffff',
+                    }
+                  }}
                 >
                   Delete
                 </Button>

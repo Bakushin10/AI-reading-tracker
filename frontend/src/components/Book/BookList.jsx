@@ -30,12 +30,13 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
           display: flex;
           flex-direction: column;
           height: 100%;
+          background-color: #000000;
         }
 
         .book-list-header {
           padding: 20px;
-          border-bottom: 1px solid #eee;
-          background-color: white;
+          border-bottom: 1px solid #00bcd4;
+          background-color: #000000;
         }
 
         .search-container {
@@ -46,17 +47,17 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
           width: 100%;
           padding: 12px 16px;
           font-size: 14px;
-          border: 1px solid #ddd;
+          border: 2px solid #333333;
           border-radius: 6px;
-          background-color: white;
-          color: black;
+          background-color: #111111;
+          color: #ffffff;
           font-family: inherit;
         }
 
         .search-input:focus {
           outline: none;
-          border-color: #2557a7;
-          box-shadow: 0 0 0 2px rgba(37, 87, 167, 0.1);
+          border-color: #00bcd4;
+          box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
         }
 
         .sort-controls {
@@ -68,10 +69,10 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         .sort-select {
           padding: 8px 12px;
           font-size: 12px;
-          border: 1px solid #ddd;
+          border: 2px solid #333333;
           border-radius: 4px;
-          background-color: white;
-          color: black;
+          background-color: #111111;
+          color: #ffffff;
           font-family: inherit;
           cursor: pointer;
         }
@@ -80,51 +81,55 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
           padding: 8px 10px;
           font-size: 14px;
           font-weight: bold;
-          border: 1px solid #ddd;
+          border: 2px solid #00bcd4;
           border-radius: 4px;
-          background-color: white;
-          color: black;
+          background-color: #00bcd4;
+          color: #000000;
           cursor: pointer;
           transition: all 0.2s ease;
           min-width: 32px;
         }
 
         .sort-order-btn:hover {
-          background-color: #f5f5f5;
+          background-color: transparent;
+          color: #00bcd4;
         }
 
         .book-list-info {
           padding: 12px 20px;
-          background-color: #f8f9fa;
-          border-bottom: 1px solid #eee;
+          background-color: #111111;
+          border-bottom: 1px solid #333333;
           font-size: 14px;
-          color: #666;
+          color: #ffffff;
         }
 
         .search-info {
           font-style: italic;
+          color: #00bcd4;
         }
 
         .book-list-items {
           flex: 1;
           overflow-y: auto;
+          background-color: #000000;
         }
 
         .book-list-item {
           padding: 12px 20px;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid #333333;
           cursor: pointer;
           transition: background-color 0.2s ease;
-          background-color: white;
+          background-color: #000000;
         }
 
         .book-list-item:hover {
-          background-color: #f8f9fa;
+          background-color: #111111;
         }
 
         .book-list-item.selected {
-          background-color: #e3f2fd;
-          border-left: 4px solid #2557a7;
+          background-color: #001a1f;
+          border-left: 4px solid #00bcd4;
+          box-shadow: inset 0 0 10px rgba(0, 188, 212, 0.1);
         }
 
         .book-item-content {
@@ -134,7 +139,7 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         .book-item-title {
           font-size: 16px;
           font-weight: 600;
-          color: #2557a7;
+          color: #ffffff;
           margin: 0 0 8px 0;
           line-height: 1.4;
         }
@@ -148,13 +153,13 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
 
         .book-item-date {
           font-size: 12px;
-          color: #666;
+          color: #00bcd4;
         }
 
         .empty-list {
           padding: 40px 20px;
           text-align: center;
-          color: #666;
+          color: #ffffff;
         }
 
         .empty-list p {

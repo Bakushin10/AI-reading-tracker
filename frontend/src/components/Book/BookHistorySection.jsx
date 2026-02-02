@@ -26,10 +26,16 @@ const BookHistorySection = () => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="400px">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="400px"
+        bgcolor="#000000"
+      >
         <Box textAlign="center">
-          <CircularProgress size={40} />
-          <Typography variant="h6" color="#666" mt={2}>
+          <CircularProgress size={40} sx={{ color: '#00bcd4' }} />
+          <Typography variant="h6" color="#ffffff" mt={2}>
             Loading entries...
           </Typography>
         </Box>
@@ -39,8 +45,8 @@ const BookHistorySection = () => {
 
   if (error) {
     return (
-      <Box p={4}>
-        <Alert severity="error">
+      <Box p={4} bgcolor="#000000">
+        <Alert severity="error" sx={{ bgcolor: '#111111', color: '#ffffff', border: '1px solid #00bcd4' }}>
           Error: {error.message}
         </Alert>
       </Box>
@@ -56,16 +62,18 @@ const BookHistorySection = () => {
       overflow="hidden"
       justifyContent="center"
       mx="auto"
+      bgcolor="#000000"
     >
       {/* Left Panel - Book List */}
       <Box
         width={300}
         minWidth={300}
-        bgcolor="white"
-        border="2px solid black"
+        bgcolor="#000000"
+        border="2px solid #00bcd4"
         borderRadius={1}
         display="flex"
         flexDirection="column"
+        sx={{ boxShadow: '0 0 20px rgba(0, 188, 212, 0.2)' }}
       >
         <BookList
           entries={books}
@@ -81,13 +89,14 @@ const BookHistorySection = () => {
         width={750}
         minWidth={750}
         maxWidth={750}
-        bgcolor="#fafafa"
-        border="2px solid black"
+        bgcolor="#000000"
+        border="2px solid #00bcd4"
         borderRadius={1}
         overflow="auto"
         sx={{
           wordWrap: 'break-word',
-          overflowWrap: 'break-word'
+          overflowWrap: 'break-word',
+          boxShadow: '0 0 20px rgba(0, 188, 212, 0.2)'
         }}
       >
         <BookDetail book={selectedBook} onBookUpdate={handleBookUpdate} />
