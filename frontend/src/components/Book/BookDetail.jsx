@@ -3,6 +3,102 @@ import { Box, TextField, Button, Typography, Link } from '@mui/material';
 import { Formik, Form } from 'formik';
 import useBookUpdate from '../../hooks/useBookUpdate';
 
+const styles = `
+  .book-detail-input .MuiOutlinedInput-root {
+    font-size: 12px;
+    font-weight: 700;
+    background-color: #111111;
+    color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 6px;
+  }
+
+  .book-detail-input .MuiOutlinedInput-root input {
+    padding: 12px;
+    color: #ffffff;
+  }
+
+  .book-detail-input .MuiOutlinedInput-root:hover {
+    border: 2px solid #555555;
+  }
+
+  .book-detail-input .MuiOutlinedInput-root.Mui-focused {
+    border: 2px solid #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+  }
+
+  .book-detail-input .MuiOutlinedInput-notchedOutline {
+    border: none;
+  }
+
+  .book-detail-memo .MuiOutlinedInput-root {
+    background-color: #111111;
+    color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 6px;
+  }
+
+  .book-detail-memo .MuiOutlinedInput-root textarea {
+    min-height: 75px;
+    color: #ffffff;
+  }
+
+  .book-detail-memo .MuiOutlinedInput-root:hover {
+    border: 2px solid #555555;
+  }
+
+  .book-detail-memo .MuiOutlinedInput-root.Mui-focused {
+    border: 2px solid #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+  }
+
+  .book-detail-memo .MuiOutlinedInput-notchedOutline {
+    border: none;
+  }
+
+  .book-detail-save-btn {
+    background-color: #00bcd4 !important;
+    color: #000000 !important;
+    border: 2px solid #00bcd4 !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+  }
+
+  .book-detail-save-btn:hover {
+    background-color: transparent !important;
+    color: #00bcd4 !important;
+  }
+
+  .book-detail-save-btn:disabled {
+    background-color: #333333 !important;
+    color: #888888 !important;
+    border: 2px solid #333333 !important;
+  }
+
+  .book-detail-delete-btn {
+    color: #ffffff !important;
+    border-color: #666666 !important;
+    border: 2px solid #666666 !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+  }
+
+  .book-detail-delete-btn:hover {
+    background-color: #333333 !important;
+    border-color: #ffffff !important;
+  }
+
+  .book-detail-link {
+    font-size: 18px;
+    text-decoration: none;
+    filter: hue-rotate(180deg);
+  }
+
+  .book-detail-link:hover {
+    transform: scale(1.1);
+  }
+`;
+
 const BookDetail = ({ book, onBookUpdate }) => {
   const { updateBook } = useBookUpdate();
   const initialValues = {
@@ -41,8 +137,10 @@ const BookDetail = ({ book, onBookUpdate }) => {
   }
 
   return (
-    <Box height="100%" display="flex" flexDirection="column" bgcolor="#000000">
-      <Box px={4} pb={4} pt={1} flex={1} overflow="auto">
+    <>
+      <style>{styles}</style>
+      <Box height="100%" display="flex" flexDirection="column" bgcolor="#000000">
+        <Box px={4} pb={4} pt={1} flex={1} overflow="auto">
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
@@ -59,30 +157,7 @@ const BookDetail = ({ book, onBookUpdate }) => {
                   placeholder="Book title..."
                   variant="outlined"
                   fullWidth
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      backgroundColor: '#111111',
-                      color: '#ffffff',
-                      border: '2px solid #333333',
-                      borderRadius: '6px',
-                      '& input': {
-                        padding: '12px',
-                        color: '#ffffff',
-                      },
-                      '&:hover': {
-                        border: '2px solid #555555',
-                      },
-                      '&.Mui-focused': {
-                        border: '2px solid #00bcd4',
-                        boxShadow: '0 0 0 2px rgba(0, 188, 212, 0.2)',
-                      },
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        border: 'none',
-                      }
-                    }
-                  }}
+                  className="book-detail-input"
                 />
               </Box>
 
@@ -94,12 +169,7 @@ const BookDetail = ({ book, onBookUpdate }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={book.link}
-                    sx={{
-                      fontSize: '18px',
-                      textDecoration: 'none',
-                      filter: 'hue-rotate(180deg)',
-                      '&:hover': { transform: 'scale(1.1)' }
-                    }}
+                    className="book-detail-link"
                   >
                     🔗
                   </Link>
@@ -125,28 +195,7 @@ const BookDetail = ({ book, onBookUpdate }) => {
                   rows={6}
                   variant="outlined"
                   fullWidth
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#111111',
-                      color: '#ffffff',
-                      border: '2px solid #333333',
-                      borderRadius: '6px',
-                      '& textarea': {
-                        minHeight: '75px',
-                        color: '#ffffff',
-                      },
-                      '&:hover': {
-                        border: '2px solid #555555',
-                      },
-                      '&.Mui-focused': {
-                        border: '2px solid #00bcd4',
-                        boxShadow: '0 0 0 2px rgba(0, 188, 212, 0.2)',
-                      },
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        border: 'none',
-                      }
-                    }
-                  }}
+                  className="book-detail-memo"
                 />
               </Box>
 
@@ -157,39 +206,14 @@ const BookDetail = ({ book, onBookUpdate }) => {
                   onClick={handleSubmit}
                   disabled={!dirty}
                   color="success"
-                  sx={{
-                    backgroundColor: '#00bcd4',
-                    color: '#000000',
-                    border: '2px solid #00bcd4',
-                    borderRadius: '6px',
-                    padding: '10px 20px',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                      color: '#00bcd4',
-                    },
-                    '&:disabled': {
-                      backgroundColor: '#333333',
-                      color: '#888888',
-                      border: '2px solid #333333',
-                    }
-                  }}
+                  className="book-detail-save-btn"
                 >
                   Save
                 </Button>
                 <Button
                   variant="outlined"
                   color="error"
-                  sx={{
-                    color: '#ffffff',
-                    borderColor: '#666666',
-                    border: '2px solid #666666',
-                    borderRadius: '6px',
-                    padding: '10px 20px',
-                    '&:hover': {
-                      backgroundColor: '#333333',
-                      borderColor: '#ffffff',
-                    }
-                  }}
+                  className="book-detail-delete-btn"
                 >
                   Delete
                 </Button>
@@ -199,6 +223,7 @@ const BookDetail = ({ book, onBookUpdate }) => {
         </Formik>
       </Box>
     </Box>
+    </>
   );
 };
 
