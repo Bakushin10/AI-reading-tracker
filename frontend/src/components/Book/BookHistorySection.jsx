@@ -4,6 +4,28 @@ import BookList from './BookList';
 import BookDetail from './BookDetail';
 import { useBooks } from '../../hooks/useBooks.js';
 
+const styles = `
+  .book-history-loading-spinner {
+    color: #00bcd4;
+  }
+
+  .book-history-error-alert {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+    border: 1px solid #00bcd4 !important;
+  }
+
+  .book-history-panel {
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.2);
+  }
+
+  .book-history-detail-panel {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-shadow: 0 0 20px rgba(0, 188, 212, 0.2);
+  }
+`;
+
 const BookHistorySection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBook, setSelectedBook] = useState(null);
@@ -34,7 +56,7 @@ const BookHistorySection = () => {
         bgcolor="#000000"
       >
         <Box textAlign="center">
-          <CircularProgress size={40} sx={{ color: '#00bcd4' }} />
+          <CircularProgress size={40} className="book-history-loading-spinner" />
           <Typography variant="h6" color="#ffffff" mt={2}>
             Loading entries...
           </Typography>
@@ -46,7 +68,7 @@ const BookHistorySection = () => {
   if (error) {
     return (
       <Box p={4} bgcolor="#000000">
-        <Alert severity="error" sx={{ bgcolor: '#111111', color: '#ffffff', border: '1px solid #00bcd4' }}>
+        <Alert severity="error" className="book-history-error-alert">
           Error: {error.message}
         </Alert>
       </Box>
@@ -54,26 +76,37 @@ const BookHistorySection = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      gap={2.5}
-      maxWidth={1070}
-      height="calc(100vh - 200px)"
-      overflow="hidden"
-      justifyContent="center"
-      mx="auto"
-      bgcolor="#000000"
-    >
+    <>
+      <style>{styles}</style>
+      <Box
+        display="flex"
+        width="100%"
+        maxWidth={{ xs: '100vw', md: 1200 }}
+        height="calc(100vh - var(--header-total-height, 170px))"
+        overflow="hidden"
+        justifyContent="center"
+        mx="auto"
+        bgcolor="#000000"
+        sx={{
+          flexDirection: { xs: 'column', md: 'row' },
+          padding: { xs: '8px', sm: '16px', md: '0' },
+          gap: { xs: 1, sm: 1.5, md: 2.5 },
+          boxSizing: 'border-box'
+        }}
+      >
       {/* Left Panel - Book List */}
       <Box
-        width={300}
-        minWidth={300}
+        width={{ xs: '100%', sm: '100%', md: '350px' }}
+        maxWidth={{ xs: '100%', md: '350px' }}
+        minWidth={{ xs: '0', md: '300px' }}
+        height={{ xs: '300px', md: 'auto' }}
         bgcolor="#000000"
         border="2px solid #00bcd4"
         borderRadius={1}
         display="flex"
         flexDirection="column"
-        sx={{ boxShadow: '0 0 20px rgba(0, 188, 212, 0.2)' }}
+        className="book-history-panel"
+        sx={{ flexShrink: { md: 0 } }}
       >
         <BookList
           entries={books}
@@ -86,22 +119,21 @@ const BookHistorySection = () => {
 
       {/* Right Panel - Book Detail */}
       <Box
-        width={750}
-        minWidth={750}
-        maxWidth={750}
+        width={{ xs: '100%', md: 'auto' }}
+        minWidth={{ xs: '0', md: '400px' }}
+        maxWidth={{ xs: '100%', md: 'none' }}
+        flex={{ xs: 1, md: 1 }}
         bgcolor="#000000"
         border="2px solid #00bcd4"
         borderRadius={1}
         overflow="auto"
-        sx={{
-          wordWrap: 'break-word',
-          overflowWrap: 'break-word',
-          boxShadow: '0 0 20px rgba(0, 188, 212, 0.2)'
-        }}
+        className="book-history-detail-panel"
+        sx={{ flexShrink: 1 }}
       >
         <BookDetail book={selectedBook} onBookUpdate={handleBookUpdate} />
       </Box>
     </Box>
+    </>
   );
 };
 
