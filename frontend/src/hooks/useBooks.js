@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BookTypes } from '../types/book.js';
+import API_CONFIG from '../config/api.js';
 
 export const useBooks = (page = 1, pageSize = 10) => {
   const [books, setBooks] = useState([]);
@@ -12,7 +13,7 @@ export const useBooks = (page = 1, pageSize = 10) => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/books?page=${currentPage}&pageSize=${currentPageSize}`);
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/books?page=${currentPage}&pageSize=${currentPageSize}`);
       if (!response.ok) {
         throw new Error('Failed to fetch books');
       }

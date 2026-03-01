@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, TextField, Button, Typography, Link } from '@mui/material';
 import { Formik, Form } from 'formik';
+import useBookUpdate from '../../hooks/useBookUpdate';
 
 const BookDetail = ({ book, onBookUpdate }) => {
+  const { updateBook } = useBookUpdate();
   const initialValues = {
     title: book?.title || '',
     memo: book?.memo || ''
@@ -10,22 +12,10 @@ const BookDetail = ({ book, onBookUpdate }) => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/books/${book.bookUuid}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update book');
-      }
-
-      const result = await response.json();
+      const result = await updateBook(book.bookUuid, values);
       onBookUpdate(result);
     } catch (err) {
-      console.error('Error updating book:', err);
+      // Error is already handled in the hook
     }
   };
 
