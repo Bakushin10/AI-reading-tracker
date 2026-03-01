@@ -80,24 +80,33 @@ const BookHistorySection = () => {
       <style>{styles}</style>
       <Box
         display="flex"
-        gap={2.5}
-        maxWidth={1070}
-        height="calc(100vh - 200px)"
+        width="100%"
+        maxWidth={{ xs: '100vw', md: 1200 }}
+        height="calc(100vh - var(--header-total-height, 170px))"
         overflow="hidden"
         justifyContent="center"
         mx="auto"
         bgcolor="#000000"
+        sx={{
+          flexDirection: { xs: 'column', md: 'row' },
+          padding: { xs: '8px', sm: '16px', md: '0' },
+          gap: { xs: 1, sm: 1.5, md: 2.5 },
+          boxSizing: 'border-box'
+        }}
       >
       {/* Left Panel - Book List */}
       <Box
-        width={300}
-        minWidth={300}
+        width={{ xs: '100%', sm: '100%', md: '350px' }}
+        maxWidth={{ xs: '100%', md: '350px' }}
+        minWidth={{ xs: '0', md: '300px' }}
+        height={{ xs: '300px', md: 'auto' }}
         bgcolor="#000000"
         border="2px solid #00bcd4"
         borderRadius={1}
         display="flex"
         flexDirection="column"
         className="book-history-panel"
+        sx={{ flexShrink: { md: 0 } }}
       >
         <BookList
           entries={books}
@@ -110,14 +119,16 @@ const BookHistorySection = () => {
 
       {/* Right Panel - Book Detail */}
       <Box
-        width={750}
-        minWidth={750}
-        maxWidth={750}
+        width={{ xs: '100%', md: 'auto' }}
+        minWidth={{ xs: '0', md: '400px' }}
+        maxWidth={{ xs: '100%', md: 'none' }}
+        flex={{ xs: 1, md: 1 }}
         bgcolor="#000000"
         border="2px solid #00bcd4"
         borderRadius={1}
         overflow="auto"
         className="book-history-detail-panel"
+        sx={{ flexShrink: 1 }}
       >
         <BookDetail book={selectedBook} onBookUpdate={handleBookUpdate} />
       </Box>
