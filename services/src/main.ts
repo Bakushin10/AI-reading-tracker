@@ -15,7 +15,14 @@ const db = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 10000,
+  max: 5,
+});
+
+db.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
 });
 
 app.use(cors());
