@@ -19,6 +19,8 @@ const db = new Pool({
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000,
   max: 5,
+  keepAlive: true, // detect dead connections (e.g. Neon compute suspension) at TCP level before pg-pool emits unhandled error
+  keepAliveInitialDelayMillis: 10000, // start probing after 10s of inactivity
 });
 
 db.on('error', (err) => {
