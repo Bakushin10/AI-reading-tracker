@@ -96,9 +96,9 @@ const BookHistorySection = () => {
       >
       {/* Left Panel - Book List */}
       <Box
-        width={{ xs: '100%', sm: '100%', md: '350px' }}
-        maxWidth={{ xs: '100%', md: '350px' }}
-        minWidth={{ xs: '0', md: '300px' }}
+        width={{ xs: '100%', sm: '100%', md: '250px' }}
+        maxWidth={{ xs: '100%', md: '250px' }}
+        minWidth={{ xs: '0', md: '200px' }}
         height={{ xs: '300px', md: 'auto' }}
         bgcolor="#000000"
         border="2px solid #00bcd4"

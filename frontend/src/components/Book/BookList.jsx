@@ -34,7 +34,7 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         }
 
         .book-list-header {
-          padding: 20px;
+          padding: 12px 8px;
           border-bottom: 1px solid #00bcd4;
           background-color: #000000;
         }
@@ -45,8 +45,8 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
 
         .search-input {
           width: 100%;
-          padding: 12px 16px;
-          font-size: 14px;
+          padding: 8px 12px;
+          font-size: 12px;
           border: 2px solid #333333;
           border-radius: 6px;
           background-color: #111111;
@@ -96,10 +96,10 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         }
 
         .book-list-info {
-          padding: 12px 20px;
+          padding: 8px;
           background-color: #111111;
           border-bottom: 1px solid #333333;
-          font-size: 14px;
+          font-size: 11px;
           color: #ffffff;
         }
 
@@ -115,7 +115,7 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         }
 
         .book-list-item {
-          padding: 12px 20px;
+          padding: 8px;
           border-bottom: 1px solid #333333;
           cursor: pointer;
           transition: background-color 0.2s ease;
@@ -137,10 +137,10 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         }
 
         .book-item-title {
-          font-size: 16px;
+          font-size: 12px;
           font-weight: 600;
           color: #ffffff;
-          margin: 0 0 8px 0;
+          margin: 0 0 4px 0;
           line-height: 1.4;
         }
 
@@ -152,7 +152,7 @@ const BookList = ({ entries, onBookSelect, selectedBook, searchTerm, onSearchCha
         }
 
         .book-item-date {
-          font-size: 12px;
+          font-size: 10px;
           color: #00bcd4;
         }
 

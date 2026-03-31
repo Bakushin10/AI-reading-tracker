@@ -31,16 +31,25 @@ const styles = `
     border: none;
   }
 
+  .book-detail-memo {
+    flex: 1;
+    height: 100%;
+  }
+
   .book-detail-memo .MuiOutlinedInput-root {
     background-color: #111111;
     color: #ffffff;
     border: 2px solid #333333;
     border-radius: 6px;
+    height: 100%;
+    align-items: flex-start;
   }
 
   .book-detail-memo .MuiOutlinedInput-root textarea {
-    min-height: 75px;
     color: #ffffff;
+    height: 100% !important;
+    overflow-y: auto !important;
+    box-sizing: border-box;
   }
 
   .book-detail-memo .MuiOutlinedInput-root:hover {
@@ -61,7 +70,6 @@ const styles = `
     color: #000000 !important;
     border: 2px solid #00bcd4 !important;
     border-radius: 6px !important;
-    padding: 10px 20px !important;
   }
 
   .book-detail-save-btn:hover {
@@ -80,7 +88,6 @@ const styles = `
     border-color: #666666 !important;
     border: 2px solid #666666 !important;
     border-radius: 6px !important;
-    padding: 10px 20px !important;
   }
 
   .book-detail-delete-btn:hover {
@@ -140,14 +147,14 @@ const BookDetail = ({ book, onBookUpdate }) => {
     <>
       <style>{styles}</style>
       <Box height="100%" display="flex" flexDirection="column" bgcolor="#000000">
-        <Box px={4} pb={4} pt={1} flex={1} overflow="auto">
+        <Box px={4} pb={4} pt={1} flex={1} overflow="auto" display="flex" flexDirection="column">
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
           enableReinitialize={true}
         >
           {({ values, handleChange, dirty, handleSubmit }) => (
-            <Form>
+            <Form style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               {/* Title Input */}
               <Box mb={2}>
                 <TextField
@@ -185,14 +192,13 @@ const BookDetail = ({ book, onBookUpdate }) => {
               </Box>
 
               {/* Notes Section */}
-              <Box mb={1}>
+              <Box mb={1} flex={1} display="flex" flexDirection="column">
                 <TextField
                   name="memo"
                   value={values.memo}
                   onChange={handleChange}
                   placeholder="Your thoughts on this reading..."
                   multiline
-                  rows={6}
                   variant="outlined"
                   fullWidth
                   className="book-detail-memo"
